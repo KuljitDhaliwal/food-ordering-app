@@ -1,0 +1,20 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=MonteCarlo&display=swap');
+
+
+.mont-font {
+  font-family: "Montserrat", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+}
+
+
+.mont-regular {
+  font-family: "MonteCarlo", cursive;
+  font-style: normal;
+}
+
+:root{
+  --div-background: 'bg-linear-180 from-yellow-400 to-yellow-500'
+}
