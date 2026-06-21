@@ -6,6 +6,7 @@ import Login from '../Pages/Login'
 import Deals from '../Pages/Deals'
 import Orders from '../Pages/Orders'
 import Menu from '../Pages/Menu'
+import Checkout from '../Pages/Checkout'
 
 function Index() {
     return (
@@ -16,6 +17,7 @@ function Index() {
                     <Route path="/deals" element={<Deals />} />
                     <Route path="/orders" element={<Orders />} />
                     <Route path="/menu" element={<Menu />} />
+                    <Route path="/checkout" element={<Checkout />} />
                 </Route>
             </Routes>
     )
