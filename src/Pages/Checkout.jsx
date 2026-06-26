@@ -49,6 +49,7 @@ function Checkout() {
             'Order_type': dineValue,
             'Order_Status': 'confirmed'
         }
+        
         finalOrderDispatch({
             type: 'Final_Order',
             payload: data
