@@ -1,14 +1,21 @@
+import { IoMdHome } from "react-icons/io";
+import { MdDiscount } from "react-icons/md";
+import { FaClipboardList } from "react-icons/fa";
+
 export const NavbarData = [
     {
         route: '/',
-        name: 'Home'
+        name: 'Home',
+        icon: IoMdHome
     },
     {
         route: '/deals',
-        name: 'Deals'
+        name: 'Deals',
+        icon: MdDiscount
     },
     {
         route: '/orders',
-        name: 'Orders'
+        name: 'Orders',
+        icon: FaClipboardList
     }
 ]

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { Theme } from '../Components/UI/Theme'
 import { useFetchAPI } from '../Hooks/FetchAPI'
 import { MenuCat } from '../StaticData/MenuCat'
@@ -10,11 +10,19 @@ import Fork from '../assets/images/icons/fork.png'
 import Cart from '../Components/Cart'
 import CartIcon from '../Components/CartIcon'
 import { useCart } from '../Hooks/CartContextHook'
+import Load from '../assets/images/loading.png'
+import { IoSearch } from "react-icons/io5";
+import { LiaTimesSolid } from "react-icons/lia";
 
 function Menu() {
-  const {state, dispatch} = useCart()
+  const { state, dispatch } = useCart()
   const [activeDiv, setActiveDiv] = useState()
+  const [search, setSearch] = useState('')
+  const [showSearch, setShowSearch] = useState(false)
+  const searchRef = useRef()
+  const [isLoadind, setIsLoading] = useState(false)
   const [mealPrice, setMealPrice] = useState([])
+  const [screenHeight, setScreenHeight] = useState(0)
   const [active, setActive] = useState(1)
   const [seeFull, setSeeFull] = useState({ 1: false })
   const [showCart, setShowCart] = useState(false)
@@ -31,8 +39,15 @@ function Menu() {
     error: fetchOneCatError } = useFetchAPI()
 
 
-  const [foodCat, setFoodCat] = useState("")
+  const {
+    fetchData: fetchSearch,
+    loading: fetchSearchLoading,
+    data: fetchSearchData,
+    error: FetchSearchError
+  } = useFetchAPI()
 
+
+  const [foodCat, setFoodCat] = useState("")
   useEffect(() => {
     fetchCategories(`${BASEURL}/categories.php`, {
       method: 'GET'
@@ -42,6 +57,8 @@ function Menu() {
 
   //Select Category
   const handleCategory = async (item) => {
+    setSearch('')
+    setShowSearch(false)
     setActiveDiv(item.idCategory)
     setActive(item.idCategory)
     await fetchOneCat(`${BASEURL}/search.php?s=${item.strCategory}`)
@@ -52,20 +69,22 @@ function Menu() {
   //Set Food Price
   const handleSetFoodPrices = () => {
     setMealPrice([])
-    if(fetchOneCatData?.meals !== null){
+    console.log('Dhoore', search)
+    let getdata = search.trim() !== '' ? fetchSearchData?.meals : fetchOneCatData?.meals;
+    if (!Array.isArray(getdata)) return [];
+    if (getdata !== null || getdata !== undefined) {
       let arr = []
-      fetchOneCatData?.meals.map(item => {
-      setMealPrice(prev => [...prev, {...item, ['mealPrice']: Math.floor(Math.random() *20) + 10}])
+      getdata.map(item => {
+        setMealPrice(prev => [...prev, { ...item, ['mealPrice']: Math.floor(Math.random() * 20) + 10 }])
       })
     }
   }
 
-  useEffect(()=>{
+  useEffect(() => {
     handleSetFoodPrices()
-  },[fetchOneCatData?.meals, active, activeDiv])
+  }, [fetchOneCatData?.meals, fetchSearchData?.meals, active, activeDiv, search])
 
   //Side Effect for Category
-
   useEffect(() => {
     const fun = async () => {
       await fetchOneCat(`${BASEURL}/search.php?s=Beef`)
@@ -73,6 +92,32 @@ function Menu() {
     fun()
   }, [])
 
+
+  ///Search Meals debounce method
+  const debounceFun = (fun, delay) => {
+    let timer = 0
+    return function (...args) {
+      clearTimeout(timer)
+      timer = setTimeout(() => {
+        fun(...args)
+      }, delay)
+    }
+
+  }
+
+  const handleSearch = (e) => {
+    const searchFun = async () => {
+      await fetchSearch(`${BASEURL}/search.php?s=${e}`)
+      setIsLoading(false)
+    }
+    setSearch(e)
+    searchFun()
+  }
+
+  const runFun = useMemo(() => {
+
+    return debounceFun(handleSearch, 300)
+  }, [])
 
 
 
@@ -99,26 +144,38 @@ function Menu() {
   }
 
   const handleCart = (item) => {
-    if(state.cart.some(e=>e.idMeal === item.idMeal)){
+    if (state.cart.some(e => e.idMeal === item.idMeal)) {
       dispatch({
         type: 'Remove_From_Cart',
         payload: item
       })
-    }else{
-        dispatch({
+    } else {
+      console.log("Dispatching...");
+      dispatch({
         type: 'Add_To_Cart',
-        payload: {...item, ['quantity']: 1}
+        payload: { ...item, ['quantity']: 1 }
       })
     }
   }
 
 
 
+  //Set cart to local
+  useEffect(() => {
+    const localData = JSON.parse(localStorage.getItem('Cart')) || []
+    console.log('LocalData', localData)
+    localStorage.setItem('Cart', JSON.stringify(state.cart))
+  }, [state.cart])
+
+
+  
+
+
+
   useEffect(() => {
     const scrollFun = () => {
       const height = window.scrollY
-
-
+      setScreenHeight(height)
       if (height > 300) {
         setShowCart(true)
       } else {
@@ -127,11 +184,18 @@ function Menu() {
 
     }
     window.addEventListener('scroll', scrollFun)
-    return ()=> window.removeEventListener('scroll', scrollFun)
+    return () => window.removeEventListener('scroll', scrollFun)
   }, [])
 
 
 
+  //Handle ShowSearch
+  const handleShowSearch = () => {
+    setShowSearch(true)
+    setTimeout(() => {
+      searchRef.current.focus()
+    }, 0);
+  }
 
 
 
@@ -139,8 +203,8 @@ function Menu() {
     <div className={`relative px-2 max-w-7xl m-auto py-4`}>
       {showCart && (
         <div className="fixed bottom-6 right-5 -translate-x-1/2 z-100 active:scale-95">
-            <CartIcon className={`bg-amber-600 p-4 rounded-full shadow-2xl text-white 
-          hover:scale-110 transition-transform`}/>
+          <CartIcon className={`bg-amber-600 p-4 rounded-full shadow-2xl text-white 
+          hover:scale-110 transition-transform`} />
         </div>
       )}
       <p className='absolute -z-10 -top-25 lg:text-[20em] 
@@ -150,38 +214,52 @@ function Menu() {
       <p className='title mont-regular text-6xl text-center text-amber-800 font-extrabold'>Menu</p>
       <p className='m-auto text-center font-light max-w-100 '>Thoughtfully crafted dishes made with fresh ingredients, bold flavors, and a passion for good food</p>
 
-
       {/* Menu Headers */}
-      <div className='mt-10 sticky top-5'>
-        {categoriesLoading ? (
-          <div className='w-full rounded-4xl py-3 animate-pulse bg-gray-500/50 grid place-items-center'>
-            <p className='p-5'>Loading...</p>
+      <div className={`mt-10 ${showCart ? 'fixed md:w-full w-11/12' : 'relative w-full'} max-w-7xl  
+      left-1/2 -translate-x-1/2 transition-all border border-gray-400/50 bg-white rounded-4xl 
+       px-2 duration-300 top-0`}>
+        <div className={`flex gap-2 py-3`}>
+          {categoriesLoading ? (
+            <div className='w-full rounded-4xl py-3 animate-pulse bg-gray-500/50 grid place-items-center'>
+              <p className='p-5'>Loading...</p>
+            </div>
+          ) : categoriesError ? (
+            <div className='text-red-500 text-center'>
+              <p>Error: {error}</p>
+            </div>
+          ) : categoriesData && categoriesData.categories ? (
+            <div className='flex gap-2 justify-between   
+              font-semibold max-w-7xl overflow-x-auto'>
+              {categoriesData.categories.map((item, key) => {
+                return <div role='button' key={item.idCategory} onClick={() => handleCategory(item)}
+                  className={`flex cursor-pointer items-center relative 
+                  shrink-0 gap-1 hover:bg-yellow-100/50 md:p-3 p-2 px-3 rounded-3xl 
+                  transition-all duration-300 ${active == item.idCategory ? 'bg-yellow-400' : ''}`}>
+                  <img src={item.strCategoryThumb} alt="Thumbnail" className='md:h-10 h-6' />
+                  {item.strCategory}
+                  {(fetchOneCatLoading && activeDiv === item.idCategory) &&
+                    <div className="absolute grid place-items-center bg-white
+                        border border-gray-400/50 animate-pulse inset-0 rounded-2xl z-10 cursor-not-allowed">
+                      <p>Loading...</p>
+                    </div>
+                  }
+                </div>
+              })}
+            </div>
+          ) : null
+          }
+          <div className='border w-fit shadow-[-10px_0_15px_-3px_rgba(0,0,0,0.2)] 
+          border-gray-400/50 rounded-2xl self-center relative flex items-center'>
+            <div className={`${showSearch ? 'flex' : 'md:flex hidden'} items-center`}>
+              <input type="search" value={search} ref={searchRef} placeholder='Search meals...' onChange={(e) => { setIsLoading(true), runFun(e.target.value), setSearch(e.target.value) }}
+                className='rounded-2xl py-2 px-3' />
+              {isLoadind && <img src={Load} alt="Loading" className='h-8 absolute  right-11 animate-spin' />}
+            </div>
+            <div className='py-2 px-2 md:hidden flex cursor-pointer' onClick={() => showSearch ? (setSearch(''), setShowSearch(false)) : handleShowSearch()}>
+              {showSearch ? (<LiaTimesSolid className='text-2xl' />) : (<IoSearch className='text-2xl' />)}
+            </div>
           </div>
-        ) : categoriesError ? (
-          <div className='text-red-500 text-center'>
-            <p>Error: {error}</p>
-          </div>
-        ) : categoriesData && categoriesData.categories ? (
-          <div className='flex gap-2 justify-between py-3 px-1 bg-white rounded-4xl 
-          border border-gray-400/50 font-semibold max-w-7xl overflow-x-auto'>
-            {categoriesData.categories.map((item, key) => {
-              return <div role='button' key={item.idCategory} onClick={() => handleCategory(item)}
-                className={`flex cursor-pointer items-center relative 
-              shrink-0 gap-1 hover:bg-yellow-100/50 md:p-3 p-2 rounded-2xl 
-              transition-all duration-300 ${active == item.idCategory ? 'bg-yellow-400' : ''}`}>
-                <img src={item.strCategoryThumb} alt="Thumbnail" className='h-10' />
-                {item.strCategory}
-                {(fetchOneCatLoading && activeDiv === item.idCategory) &&
-                  <div className="absolute grid place-items-center bg-white
-                    border border-gray-400/50 animate-pulse inset-0 rounded-2xl z-10 cursor-not-allowed">
-                    <p>Loading...</p>
-                  </div>
-                }
-              </div>
-            })}
-          </div>
-        ) : null
-        }
+        </div>
       </div>
 
 
@@ -228,14 +306,14 @@ function Menu() {
                         <p className='font-bold text-2xl 
                         bg-black rounded-full w-15 h-15 grid place-items-center text-white'>${item.mealPrice}</p>
 
-                        <Button children={state.cart.some(e=>e.idMeal === item.idMeal) ? 'Remove from Cart' : 'Add to Cart'} 
-                        onClick={()=> handleCart(item)} 
-                        className={Theme.buttonGradient} />
+                        <Button children={state.cart.some(e => e.idMeal === item.idMeal) ? 'Remove from Cart' : 'Add to Cart'}
+                          onClick={() => handleCart(item)}
+                          className={`${state.cart.some(e => e.idMeal === item.idMeal) ? `${Theme.deleteBtn} text-white` : Theme.buttonGradient} cursor-pointer`} />
                       </div>
                     </div>
                   </div>
-                  <div className={`${key % 2 === 0 ? 'ml-0' : ''} md:h-100 md:w-100 p-1 bg-amber-400 rounded-full shrink-0`}>
-                    <img src={item.strMealThumb} alt="Meal Image" className='rounded-full h-full w-full object-cover' />
+                  <div className={`${key % 2 === 0 ? 'md:ml-0' : ''} md:h-100 md:w-100 p-1 m-auto bg-amber-400 w-fit rounded-full shrink-0`}>
+                    <img src={item.strMealThumb} alt="Meal Image" className='rounded-full md:h-full h-60 object-cover' />
                   </div>
                 </div>
               })}

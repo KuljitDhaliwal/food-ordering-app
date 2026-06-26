@@ -7,6 +7,8 @@ import Deals from '../Pages/Deals'
 import Orders from '../Pages/Orders'
 import Menu from '../Pages/Menu'
 import Checkout from '../Pages/Checkout'
+import OrderSuccess from '../Pages/OrderSuccess'
+import Entry from '../Components/Entry'
 
 function Index() {
     return (
@@ -18,7 +20,9 @@ function Index() {
                     <Route path="/orders" element={<Orders />} />
                     <Route path="/menu" element={<Menu />} />
                     <Route path="/checkout" element={<Checkout />} />
-                </Route>
+                    <Route path="/order-success" element={<OrderSuccess/>} />
+                    <Route path="/entry" element={<Entry/>} />
+                </Route> 
             </Routes>
     )
 }

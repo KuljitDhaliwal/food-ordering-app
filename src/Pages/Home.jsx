@@ -39,7 +39,7 @@ function Home() {
                 </p>
                 <Button children={`Explore Menu`} 
                 className={`bg-linear-180 my-4 shadow-xl block 
-                md:mx-0 m-auto from-yellow-400 to-yellow-500`}
+                md:mx-0 m-auto from-yellow-400 to-yellow-500 cursor-pointer`}
                 onClick={()=> navigate('/menu')}
                 />
             </div>

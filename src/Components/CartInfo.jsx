@@ -6,9 +6,9 @@ import { useCart } from '../Hooks/CartContextHook'
 import { FaTimes, FaTrash } from 'react-icons/fa'
 import Counter from './Counter'
 
-function CartInfo() {
+function CartInfo({state}) {
     const navigate = useNavigate()
-    const { state, dispatch } = useCart()
+    const { dispatch } = useCart()
     const location = useLocation()
     const handleInstructions = (e) => {
         const newObj = { [e.target.name]: e.target.value }
@@ -43,15 +43,15 @@ function CartInfo() {
         <div className='flex flex-col flex-1 min-h-0 overflow-hidden'>
             <div className='flex-1 overflow-y-auto h-full pr-1'>
                 <div className='grid gap-2 mt-4'>
-                    {state.cart.map((item, key) => {
+                    {state?.cart?.map((item, key) => {
                         return <div key={key} className='bg-gray-50 rounded-2xl p-4 flex justify-between'>
                             <div className='flex flex-1 gap-3 items-stretch'>
                                 <img src={item.strMealThumb} alt="Meal Image" className='h-20 w-20 rounded-2xl' />
                                 <div className='flex-1'>
                                     <div className="flex justify-between items-center">
-                                        <p className='text-xl font-bold'>{item.strMeal}</p>
+                                        <p className='md:text-xl font-bold'>{item.strMeal}</p>
                                         {location.pathname !== '/menu' && (
-                                            <p className='text-xl font-bold'>${item.mealPrice}</p>
+                                            <p className='md:text-xl font-bold'>${item.mealPrice}</p>
                                         )}
                                     </div>
                                     {location.pathname !== '/menu' && (
@@ -63,7 +63,6 @@ function CartInfo() {
                                     {location.pathname === '/menu' &&
                                         <p className='text-xl font-bold'>${item.mealPrice}</p>
                                     }
-                                    {item.note && <p>Note:- {item.note}</p>}
                                     {location.pathname === '/menu' &&
                                         (
                                             <Counter increased={() => handleIncreaseQunatity(item)} decreased={() => handleDecreaseQuantity(item)} item={item} />
