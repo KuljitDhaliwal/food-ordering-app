@@ -37,6 +37,15 @@ function Checkout() {
     }, [])
 
 
+    //SCrool Top
+    useEffect(()=>{
+        window.scrollTo({
+  top: 0,
+  behavior: "instant"
+})
+    },[])
+
+
 
     const handleOrder = () => {
         if(tableNumber === undefined || tableNumber === null)return
@@ -49,7 +58,7 @@ function Checkout() {
             'Order_type': dineValue,
             'Order_Status': 'confirmed'
         }
-        
+
         finalOrderDispatch({
             type: 'Final_Order',
             payload: data
@@ -196,12 +205,10 @@ function Checkout() {
                             Please review your order details and place you order.
                         </p>
                     </div>
-                    <Button children={<div>
-                        <p>Place Order</p>
-                        <p className='text-sm text-white font-light'>{dineValue === 'dineIn' ? 'Dine In : Pay After Meal' : 'Takeaway : Pay Now'}</p>
-                    </div>} className={`${Theme.buttonGradient} md:w-auto w-full`}
-                        onClick={() => handleOrder()}
-                    />
+                            <Button children={<div>
+                                <p>Place Order</p>
+                                <p className='text-sm font-light'>{dineValue === 'dineIn' ? 'Dine In : Pay After Meal' : 'Takeaway : Pay Now'}</p>
+                            </div>} disabled={tableNumber === null || tableNumber <= 0} onClick={() => handleOrder()} className={`${tableNumber === null || tableNumber <= 0 ? `${Theme.disableBtn} text-black cursor-not-allowed` : `${Theme.buttonGradient} cursor-pointer`} md:w-150 w-full `} />
                 </div>
             </div>
         </div>

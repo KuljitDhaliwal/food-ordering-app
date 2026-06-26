@@ -235,7 +235,7 @@ function Menu() {
                   className={`flex cursor-pointer items-center relative 
                   shrink-0 gap-1 hover:bg-yellow-100/50 md:p-3 p-2 px-3 rounded-3xl 
                   transition-all duration-300 ${active == item.idCategory ? 'bg-yellow-400' : ''}`}>
-                  <img src={item.strCategoryThumb} alt="Thumbnail" className='md:h-10 h-6' />
+                  <img loading="lazy" src={item.strCategoryThumb} alt="Thumbnail" className='md:h-10 h-6' />
                   {item.strCategory}
                   {(fetchOneCatLoading && activeDiv === item.idCategory) &&
                     <div className="absolute grid place-items-center bg-white
@@ -312,8 +312,8 @@ function Menu() {
                       </div>
                     </div>
                   </div>
-                  <div className={`${key % 2 === 0 ? 'md:ml-0' : ''} md:h-100 md:w-100 p-1 m-auto bg-amber-400 w-fit rounded-full shrink-0`}>
-                    <img src={item.strMealThumb} alt="Meal Image" className='rounded-full md:h-full h-60 object-cover' />
+                  <div className={`${key % 2 === 0 ? 'md:ml-0' : ''} md:h-100 h-60 w-60 md:w-100 p-1 m-auto bg-amber-400 rounded-full shrink-0`}>
+                    <img loading="lazy" src={item.strMealThumb} alt="Meal Image" className='rounded-full md:h-full h-60 object-cover' />
                   </div>
                 </div>
               })}

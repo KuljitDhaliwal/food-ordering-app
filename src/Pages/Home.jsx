@@ -4,6 +4,7 @@ import FoodDish from '../assets/images/yellow.png'
 import Button from '../Components/UI/Button';
 import { useNavigate } from 'react-router-dom';
 import { Theme } from '../Components/UI/Theme';
+import { BsForkKnife } from 'react-icons/bs';
 function Home() {
     const navigate = useNavigate()
   return (
@@ -13,15 +14,9 @@ function Home() {
         grid md:grid-cols-2 md:grid-rows-1 grid-rows-2 min-h-[calc(100vh-168px)] overflow-hidden items-stretch`}>
             
             <div className="left lg:p-10 p-4">
-                <div className="rounded-3xl lg:p-5 p-3 flex md:w-fit items-center gap-4 bg-white/50">
-                    <div className='relative'>
-                        <div className="bg-red-600 p-1 w-fit rounded-full"></div>
-                        <div className="bg-red-500 rounded-full p-2 absolute 
-                        top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 
-                        animate-ping [animation-duration:2s]">
-                        </div>
-                    </div>
-                    <p className='text-xl'>Premium Dining with RiseView</p>
+                <div className="rounded-3xl lg:p-5 p-3 flex md:ml-0 m-auto text-amber-700 w-fit items-center gap-2 bg-yellow-200/50">
+                    <BsForkKnife/>
+                    <p className='text-xl'>Best Food - Best Memories</p>
                 </div>
                 <p className='mont-font mt-4 text-amber-900 font-semibold lg:text-7xl text-4xl md:text-start text-center'>
                     Warm plates, 
