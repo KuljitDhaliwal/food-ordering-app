@@ -10,6 +10,7 @@ import Checkout from '../Pages/Checkout'
 import OrderSuccess from '../Pages/OrderSuccess'
 import Entry from '../Components/Entry'
 import NotFound from '../Pages/NotFound'
+import Guide from '../Pages/Guide'
 
 function Index() {
     return (
@@ -23,8 +24,8 @@ function Index() {
                     <Route path="/checkout" element={<Checkout />} />
                     <Route path="/order-success" element={<OrderSuccess/>} />
                     <Route path="/entry" element={<Entry/>} />
+                    <Route path="/guide" element={<Guide/>} />
                     <Route path="/*" element={<NotFound/>} />
-
                 </Route> 
             </Routes>
     )
