@@ -28,10 +28,10 @@ function Guide() {
                             </p>
                         </div>
                     </div>
-                    <div className='grid md:grid-cols-3 lg:grid-cols-6 gap-10 items-stretch mt-10'>
+                    <div className='grid md:grid-cols-3 lg:grid-cols-6 gap-4 items-stretch mt-10'>
                         {HowItWorks.map((item, key) => {
                             const Icon = item.icon
-                            return <div key={key} className='bg-yellow-50 rounded-2xl p-4 shadow'>
+                            return <div key={key} className='bg-yellow-50 rounded-2xl p-3 shadow'>
                                 <p className='bg-yellow-700 text-white m-auto -mt-8 w-8 h-8 grid place-items-center rounded-full'>{item.id}</p>
                                 <Icon className='text-3xl text-center block mx-auto my-2 font-extralight' />
                                 <p className='text-center'>{item.title}</p>
@@ -66,12 +66,12 @@ function Guide() {
                             </p>
                         </div>
                     </div>
-                    <div className='grid md:grid-cols-3 lg:grid-cols-6 gap-10 items-stretch mt-10'>
+                    <div className='grid md:grid-cols-3 lg:grid-cols-6 gap-4 items-stretch mt-10'>
                         {DirectVisitSteps.map((item, key) => {
                             const Icon = item.icon
-                            return <div key={key} className='bg-yellow-50 rounded-2xl p-4 shadow'>
+                            return <div key={key} className='bg-yellow-50 rounded-2xl p-3 shadow'>
                                 <p className='bg-yellow-700 text-white m-auto -mt-8 w-8 h-8 grid place-items-center rounded-full'>{item.id}</p>
-                                <Icon className='text-3xl text-center block mx-auto my-2 my-2 font-extralight' />
+                                <Icon className='text-3xl text-center block mx-auto my-2 font-extralight' />
                                 <p className='text-center'>{item.title}</p>
                                 <p className='text-sm text-gray-400 text-center'>{item.description}</p>
                             </div>
