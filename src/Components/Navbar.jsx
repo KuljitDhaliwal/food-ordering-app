@@ -18,7 +18,7 @@ function Navbar() {
     return (
         <nav className='border-gray-400/50 border-b relative z-20'>
             <div className='h-22 m-auto flex justify-between items-center max-w-7xl relative px-2'>
-                <img src={Logo} alt="Logo" className='h-18 cursor-pointer' />
+                <img src={Logo} alt="Logo" className='md:h-18 h-12 cursor-pointer' />
                 <div className={`${openNavbar ? 'block' : 'md:block hidden'} md:rounded-4xl p-2 border 
                 border-gray-400/50 md:relative absolute
                 md:top-0 top-22 md:w-auto bg-cover w-full md:bg-transparent bg-white left-0 md:h-auto h-screen`}>
