@@ -2,7 +2,6 @@ import React, { useEffect } from 'react'
 import PublicLayout from './Layout/PublicLayout'
 import Index from './Routes'
 import Cart from './Components/Cart'
-import Back from './assets/images/back.png'
 import { useCart } from './Hooks/CartContextHook'
 function App() {
   const { state, dispatch } = useCart()
@@ -28,7 +27,7 @@ function App() {
   }, [])
 
   return (
-    <div className="relative overflow-x-hidden min-h-screen bg-[url('./assets/images/back.png')] bg-cover bg-center bg-no-repeat bg-fixed">
+    <div className="relative overflow-x-hidden min-h-screen bg-[url('./assets/images/back.avif')] bg-cover bg-center bg-no-repeat bg-fixed">
       <div className="absolute w-full h-full bg-white/60"></div>
       <Index />
       <Cart />

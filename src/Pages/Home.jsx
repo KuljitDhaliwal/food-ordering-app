@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { useFetchAPI } from '../Hooks/FetchAPI';
-import FoodDish from '../assets/images/dish.png'
-import Leaf from '../assets/images/leaf.webp'
+import FoodDish from '../assets/images/dish.avif'
+import Leaf from '../assets/images/leaf.avif'
 import Button from '../Components/UI/Button';
 import { useNavigate } from 'react-router-dom';
 import { Theme } from '../Components/UI/Theme';
@@ -56,7 +56,7 @@ function Home() {
                 <img src={Leaf} alt="Leaf" className='absolute bottom-10 right-3 h-10 z-10'/>
                 <img src={Leaf} alt="Leaf" className='absolute bottom-10 right-50 h-10 z-10'/>
                 <img src={Leaf} alt="Leaf" className='absolute h-100'/>
-                <img src={FoodDish} alt="Food Dish Image" className='object-cover hover:rotate-5 transition-all duration-300 inset-0 absolute'/>
+                <img src={FoodDish} fetchPriority='high' decoding='async' alt="Food Dish Image" className='object-cover hover:rotate-5 transition-all duration-300 inset-0 absolute'/>
             </div>
         </div>
     </div>

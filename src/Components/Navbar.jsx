@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import Logo from '../assets/images/logo.png'
+import Logo from '../assets/images/logo.avif'
 import { NavbarData } from '../StaticData/NavbarData'
 import { NavLink, useLocation } from 'react-router-dom'
 import { FaBell } from "react-icons/fa";
