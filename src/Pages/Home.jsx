@@ -6,15 +6,16 @@ import Button from '../Components/UI/Button';
 import { useNavigate } from 'react-router-dom';
 import { Theme } from '../Components/UI/Theme';
 import { BsForkKnife } from 'react-icons/bs';
+import Carousol from '../Components/Carousol';
 function Home() {
     const navigate = useNavigate()
   return (
     <div className='max-w-7xl 
      m-auto py-10 px-2 relative z-10'>
         <div className={`rounded-4xl min-h-[calc(100vh-168px)]  ${Theme.backDivGradient}
-        grid md:grid-cols-2 md:grid-rows-1 grid-rows-2 overflow-hidden items-stretch`}>
+        grid md:grid-cols-2 md:grid-rows-1 grid-rows-2 md:gap-0 gap-10 overflow-hidden items-stretch`}>
             
-            <div className="left lg:p-10 p-4">
+            <div className="left lg:p-10 p-4 self-center">
                 <div className="rounded-3xl lg:p-5 p-3 flex md:ml-0 m-auto text-amber-700 w-fit items-center gap-2 bg-yellow-200/50">
                     <BsForkKnife/>
                     <p className='text-xl'>Best Food - Best Memories</p>
@@ -49,14 +50,19 @@ function Home() {
 
                 </div>
             </div>
-            <div className="right h-full relative">
-                <img src={Leaf} alt="Leaf" className='absolute h-100'/>
-                <img src={Leaf} alt="Leaf" className='absolute h-100 right-0'/>
+            <div className="right relative h-full grid place-items-center">
+                <div className='self-center md:grid hidden place-items-center h-fit'>
+                    <Carousol/>
+                </div>
+                <div className='md:hidden block'>
+                <img src={Leaf} alt="Leaf" className='absolute h-50 inset-0'/>
+                <img src={Leaf} alt="Leaf" className='absolute h-50 right-1/2 top-0'/>
                 <img src={Leaf} alt="Leaf" className='absolute h-10 z-10'/>
                 <img src={Leaf} alt="Leaf" className='absolute bottom-10 right-3 h-10 z-10'/>
                 <img src={Leaf} alt="Leaf" className='absolute bottom-10 right-50 h-10 z-10'/>
                 <img src={Leaf} alt="Leaf" className='absolute h-100'/>
                 <img src={FoodDish} fetchPriority='high' decoding='async' alt="Food Dish Image" className='object-cover hover:rotate-5 transition-all duration-300 inset-0 absolute'/>
+                </div>
             </div>
         </div>
     </div>
